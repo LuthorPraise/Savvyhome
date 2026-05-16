@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savvy Homes — Site Structure v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #F5920A;
+    --gold: #D97B00;
+    --black: #0A0A0A;
+    --charcoal: #1A1A1A;
+    --offwhite: #F7F3EE;
+    --gray: #888;
+    --border: #2A2A2A;
+    --block-bg: #141414;
+  }
+
+  body { background: var(--black); color: var(--offwhite); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.5; }
+
+  /* TOP BAR */
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--charcoal); border-bottom: 1px solid var(--border);
+    padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .top-bar-brand { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--orange); letter-spacing: 0.03em; }
+  .top-bar-meta { font-size: 11px; color: var(--gray); letter-spacing: 0.08em; text-transform: uppercase; }
+  .page-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .page-btn {
+    background: none; border: 1px solid var(--border); color: var(--gray);
+    font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 5px 12px; border-radius: 2px;
+    cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.2s;
+  }
+  .page-btn:hover, .page-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  /* LAYOUT */
+  .workspace { display: grid; grid-template-columns: 200px 1fr; min-height: calc(100vh - 53px); }
+
+  /* SIDEBAR */
+  .sidebar { border-right: 1px solid var(--border); padding: 20px 16px; position: sticky; top: 53px; height: calc(100vh - 53px); overflow-y: auto; }
+  .sidebar-label { font-size: 10px; color: var(--gray); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section-tree { margin-bottom: 20px; }
+  .tree-section { font-size: 11px; color: #aaa; padding: 3px 0 3px 12px; border-left: 1px solid var(--border); cursor: pointer; transition: color 0.15s; }
+  .tree-section:hover { color: var(--offwhite); }
+  .tree-section.active { color: var(--orange); border-left-color: var(--orange); }
+
+  /* CANVAS */
+  .canvas { padding: 32px 40px; overflow-y: auto; }
+
+  /* PAGE HEADER */
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--offwhite); line-height: 1.1; }
+  .page-title span { display: block; font-size: 12px; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--gray); margin-top: 4px; letter-spacing: 0.05em; }
+  .page-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .tag { font-size: 10px; padding: 4px 10px; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+  .tag-primary { background: rgba(245,146,10,0.15); color: var(--orange); border: 1px solid rgba(245,146,10,0.3); }
+  .tag-gray { background: rgba(255,255,255,0.06); color: #aaa; border: 1px solid var(--border); }
+  .tag-new { background: rgba(100,200,100,0.12); color: #7dba7d; border: 1px solid rgba(100,200,100,0.25); }
+
+  /* SECTION BLOCK */
+  .section-block { background: var(--block-bg); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 14px; overflow: hidden; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+  .section-name { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #ccc; display: flex; align-items: center; gap: 8px; }
+  .section-num { font-size: 10px; color: var(--gray); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 2px; }
+  .section-type { font-size: 10px; color: var(--orange); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-body { padding: 16px; }
+
+  /* WIREFRAME ATOMS */
+  .wf-img-box {
+    background: rgba(245,146,10,0.07);
+    border: 1px dashed rgba(245,146,10,0.25);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+    color: rgba(245,146,10,0.45); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  .wf-text {
+    font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.04em;
+    padding: 0; line-height: 1.6;
+  }
+  .wf-text.headline { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: rgba(255,255,255,0.18); line-height: 1.2; }
+  .wf-text.subhead { font-size: 13px; color: rgba(255,255,255,0.2); }
+  .wf-text.body { font-size: 11px; color: rgba(255,255,255,0.18); }
+  .wf-text.label { font-size: 10px; color: rgba(245,146,10,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .wf-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 10px 20px; border-radius: 2px; font-weight: 500;
+  }
+  .wf-btn.primary { background: rgba(245,146,10,0.2); border: 1px solid rgba(245,146,10,0.5); color: var(--orange); }
+  .wf-btn.ghost { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); }
+  .wf-btn.wa { background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.3); color: rgba(37,211,102,0.8); }
+
+  .wf-field {
+    height: 40px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.14);
+    border-radius: 2px; display: flex; align-items: center; padding: 0 12px;
+    color: rgba(255,255,255,0.18); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .wf-textarea {
+    height: 80px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.14);
+    border-radius: 2px; display: flex; align-items: flex-start; padding: 10px 12px;
+    color: rgba(255,255,255,0.18); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .wf-divider { height: 1px; background: var(--border); margin: 14px 0; }
+  .wf-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10px;
+    padding: 4px 10px; border-radius: 2px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .wf-badge.orange { background: rgba(245,146,10,0.12); border: 1px solid rgba(245,146,10,0.3); color: var(--orange); }
+  .wf-badge.gray { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #aaa; }
+
+  /* LAYOUT HELPERS */
+  .row { display: flex; gap: 12px; margin-bottom: 10px; align-items: stretch; }
+  .row.mb0 { margin-bottom: 0; }
+  .col { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .col-img { flex: 0 0 var(--w, 260px); }
+
+  /* NOTES */
+  .notes { margin-top: 12px; padding: 10px 14px; background: rgba(245,146,10,0.06); border-left: 2px solid rgba(245,146,10,0.4); border-radius: 0 3px 3px 0; }
+  .notes-title { font-size: 10px; font-weight: 500; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .notes ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .notes li { font-size: 11px; color: #bbb; padding-left: 12px; position: relative; }
+  .notes li::before { content: '→'; position: absolute; left: 0; color: var(--orange); font-size: 10px; }
+  .notes-new { background: rgba(100,200,100,0.06); border-left-color: rgba(100,200,100,0.4); }
+  .notes-new .notes-title { color: #7dba7d; }
+  .notes-new li::before { color: #7dba7d; }
+
+  /* PAGE HIDDEN */
+  .page-content { display: none; }
+  .page-content.visible { display: block; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: var(--black); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* NAV VISUAL */
+  .nav-visual { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.12); border-radius: 3px; padding: 12px 16px; }
+  .nav-logo-box { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: var(--orange); }
+  .nav-links { display: flex; gap: 16px; }
+  .nav-link { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.05em; text-transform: uppercase; }
+  .nav-link.active { color: var(--orange); }
+
+  /* TICKER STRIP */
+  .ticker-strip {
+    background: var(--orange); height: 36px; display: flex; align-items: center;
+    overflow: hidden; position: relative; border-radius: 2px;
+  }
+  .ticker-inner {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: ticker 18s linear infinite;
+  }
+  .ticker-item {
+    font-size: 11px; color: #000; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0 28px; display: flex; align-items: center; gap: 10px;
+  }
+  .ticker-dot { width: 4px; height: 4px; background: rgba(0,0,0,0.4); border-radius: 50%; flex-shrink: 0; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* FOOTER VISUAL */
+  .footer-visual { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 12px; padding: 16px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 8px; }
+  .footer-col-label { font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .footer-line { height: 6px; border-radius: 2px; background: rgba(255,255,255,0.07); margin-bottom: 5px; }
+
+  /* CAROUSEL VISUAL */
+  .carousel-mock { position: relative; overflow: hidden; border: 1px dashed rgba(255,255,255,0.1); border-radius: 3px; padding: 20px; background: rgba(255,255,255,0.03); }
+  .carousel-slide { display: flex; gap: 16px; align-items: flex-start; }
+  .carousel-quote { flex: 1; }
+  .carousel-quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: rgba(245,146,10,0.2); line-height: 1; margin-bottom: 4px; }
+  .carousel-body { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.6; margin-bottom: 10px; font-style: italic; }
+  .carousel-author { font-size: 10px; color: rgba(245,146,10,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+  .carousel-dots { display: flex; gap: 6px; justify-content: center; margin-top: 14px; }
+  .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  .carousel-dot.active { background: var(--orange); width: 18px; border-radius: 3px; }
+  .carousel-arrows { position: absolute; top: 50%; right: 14px; transform: translateY(-50%); display: flex; gap: 6px; }
+  .carousel-arrow { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: rgba(255,255,255,0.3); }
+
+  /* PROPERTY CARD MOCK */
+  .prop-card { background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; }
+  .prop-card-img { height: 110px; background: rgba(245,146,10,0.07); border-bottom: 1px dashed rgba(245,146,10,0.2); display: flex; align-items: center; justify-content: center; color: rgba(245,146,10,0.35); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .prop-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; }
+  .prop-card-title { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+  .prop-card-loc { font-size: 10px; color: rgba(245,146,10,0.6); letter-spacing: 0.05em; }
+  .prop-card-price { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .prop-card-wa { margin-top: 4px; font-size: 10px; color: rgba(37,211,102,0.7); letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* INQUIRY PANEL */
+  .inquiry-panel { background: rgba(245,146,10,0.06); border: 1px solid rgba(245,146,10,0.2); border-radius: 4px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .inquiry-panel-title { font-size: 11px; font-weight: 500; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; }
+  .inquiry-tab-row { display: flex; gap: 6px; }
+  .inquiry-tab { font-size: 10px; padding: 6px 14px; border-radius: 2px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+  .inquiry-tab.on { background: var(--orange); color: #fff; border: 1px solid var(--orange); }
+  .inquiry-tab.off { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.35); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div class="top-bar-brand">Savvy Homes</div>
+    <div class="top-bar-meta">Mid-Fi Structure · v2 · 5 Pages</div>
+  </div>
+  <div class="page-nav">
+    <button class="page-btn active" onclick="showPage('home',this)">Home</button>
+    <button class="page-btn" onclick="showPage('about',this)">About</button>
+    <button class="page-btn" onclick="showPage('properties',this)">Properties</button>
+    <button class="page-btn" onclick="showPage('services',this)">Services</button>
+    <button class="page-btn" onclick="showPage('contact',this)">Contact</button>
+  </div>
+</div>
+
+<div class="workspace">
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <main class="canvas">
+
+
+    <!-- ══════════════════════ HOME ══════════════════════ -->
+    <div class="page-content visible" id="page-home">
+
+      <div class="page-header">
+        <div class="page-title">Home <span>First impression · Primary conversion page</span></div>
+        <div class="page-tags">
+          <span class="tag tag-primary">Landing</span>
+          <span class="tag tag-gray">8 Sections</span>
+          <span class="tag tag-new">Updated</span>
+        </div>
+      </div>
+
+      <!-- NAV -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">00</span> Navigation</div><div class="section-type">Global · Sticky</div></div>
+        <div class="section-body">
+          <div class="nav-visual">
+            <div class="nav-logo-box">Savvy Homes</div>
+            <div class="nav-links">
+              <div class="nav-link active">Home</div>
+              <div class="nav-link">About</div>
+              <div class="nav-link">Properties</div>
+              <div class="nav-link">Services</div>
+              <div class="nav-link">Contact</div>
+            </div>
+            <div class="wf-btn wa">WhatsApp Us</div>
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>One WhatsApp CTA in nav — persistent across all pages, so no need to repeat on every section</li>
+            <li>Shrinks on scroll; logo scales down</li>
+            <li>Mobile: hamburger menu</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">01</span> Hero</div><div class="section-type">Split Layout · Photo Right</div></div>
+        <div class="section-body">
+          <div class="row">
+            <!-- LEFT: text stack, no boxy containers -->
+            <div class="col" style="justify-content:center;padding:16px 0;">
+              <div class="wf-text label">Lagos · Abuja · Premium Real Estate</div>
+              <div style="height:6px;"></div>
+              <div class="wf-text headline">Find Your<br/>Dream Home</div>
+              <div style="height:8px;"></div>
+              <div class="wf-text body">Two lines of value proposition text — concise, premium, direct.</div>
+              <div style="height:16px;"></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <div class="wf-btn primary">View Properties</div>
+                <div class="wf-btn ghost">Our Services</div>
+              </div>
+              <div style="height:10px;"></div>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.2);">500+ Deals Closed</div>
+                <div style="width:1px;height:12px;background:var(--border);"></div>
+                <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.2);">RC #2905976</div>
+              </div>
+            </div>
+            <!-- RIGHT: real estate photo -->
+            <div class="col-img wf-img-box" style="--w:46%;height:340px;">
+              📷 Real Estate Photo<br/><span style="font-size:9px;opacity:0.6;text-align:center;">Full bleed, slight rounded corners<br/>Amber overlay tint at bottom edge</span>
+            </div>
+          </div>
+          <div class="notes notes-new"><div class="notes-title">Changes</div><ul>
+            <li>Photo sits to the right — not as a background, but as a side image panel</li>
+            <li>Text is free-floating — no boxy containers around it</li>
+            <li>Only 2 CTAs here: View Properties + Services (no WhatsApp in hero — nav handles it)</li>
+            <li>RC number appears as a small inline trust note, not a badge</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- TICKER STRIP -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">02</span> Moving Text Strip</div><div class="section-type">Marquee · Infinite Scroll</div></div>
+        <div class="section-body">
+          <div class="ticker-strip">
+            <div class="ticker-inner">
+              <div class="ticker-item">Property Sales <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Land Sales <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Lagos & Abuja <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Property Inspection <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Real Estate Consultation <span class="ticker-dot"></span></div>
+              <div class="ticker-item">RC Registered #2905976 <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Trusted Since 2016 <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Property Sales <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Land Sales <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Lagos & Abuja <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Property Inspection <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Real Estate Consultation <span class="ticker-dot"></span></div>
+              <div class="ticker-item">RC Registered #2905976 <span class="ticker-dot"></span></div>
+              <div class="ticker-item">Trusted Since 2016 <span class="ticker-dot"></span></div>
+            </div>
+          </div>
+          <div class="notes notes-new"><div class="notes-title">Notes</div><ul>
+            <li>Full-width amber strip — services + credentials scroll left continuously</li>
+            <li>CSS animation only — no JS needed</li>
+            <li>RC number mentioned here once as a trust signal in motion</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">03</span> Services Overview</div><div class="section-type">3-Card Grid</div></div>
+        <div class="section-body">
+          <!-- Section label as free text -->
+          <div class="wf-text label" style="margin-bottom:6px;">What We Do</div>
+          <div class="wf-text subhead" style="margin-bottom:16px;">How We Help You Find Home</div>
+          <div class="row">
+            <div class="col" style="background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:3px;padding:14px;gap:6px;">
+              <div class="wf-text label">🏠 Property Sales</div>
+              <div class="wf-text body">Short description of service — 1–2 lines.</div>
+              <div class="wf-text" style="font-size:10px;color:rgba(245,146,10,0.5);margin-top:4px;">Learn More →</div>
+            </div>
+            <div class="col" style="background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:3px;padding:14px;gap:6px;">
+              <div class="wf-text label">🌍 Land Sales</div>
+              <div class="wf-text body">Short description of service — 1–2 lines.</div>
+              <div class="wf-text" style="font-size:10px;color:rgba(245,146,10,0.5);margin-top:4px;">Learn More →</div>
+            </div>
+            <div class="col" style="background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:3px;padding:14px;gap:6px;">
+              <div class="wf-text label">🔍 Consultation & Inspection</div>
+              <div class="wf-text body">Short description of service — 1–2 lines.</div>
+              <div class="wf-text" style="font-size:10px;color:rgba(245,146,10,0.5);margin-top:4px;">Learn More →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">04</span> Stats Strip</div><div class="section-type">Counter Animation on Scroll</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col" style="align-items:center;text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--orange);opacity:0.5;">500+</div>
+              <div class="wf-text body">Properties Handled</div>
+            </div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div class="col" style="align-items:center;text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--orange);opacity:0.5;">8+</div>
+              <div class="wf-text body">Years Experience</div>
+            </div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div class="col" style="align-items:center;text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--orange);opacity:0.5;">2</div>
+              <div class="wf-text body">Cities Covered</div>
+            </div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div class="col" style="align-items:center;text-align:center;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--orange);opacity:0.5;">98%</div>
+              <div class="wf-text body">Client Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURED PROPERTIES -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">05</span> Featured Properties</div><div class="section-type">3-Card Grid · Image-Led</div></div>
+        <div class="section-body">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+            <div>
+              <div class="wf-text label">Featured Listings</div>
+              <div class="wf-text subhead">Handpicked for You</div>
+            </div>
+            <div class="wf-btn ghost" style="padding:7px 14px;">View All →</div>
+          </div>
+          <div class="row">
+            <div class="prop-card col">
+              <div class="prop-card-img">Property Photo</div>
+              <div class="prop-card-body">
+                <div class="prop-card-title">3-Bed Terrace, Lekki Phase 1</div>
+                <div class="prop-card-loc">📍 Lagos</div>
+                <div class="prop-card-price">₦45,000,000</div>
+                <div class="prop-card-wa">Enquire via WhatsApp →</div>
+              </div>
+            </div>
+            <div class="prop-card col">
+              <div class="prop-card-img">Property Photo</div>
+              <div class="prop-card-body">
+                <div class="prop-card-title">2-Bed Apartment, Wuse 2</div>
+                <div class="prop-card-loc">📍 Abuja</div>
+                <div class="prop-card-price">₦30,000,000</div>
+                <div class="prop-card-wa">Enquire via WhatsApp →</div>
+              </div>
+            </div>
+            <div class="prop-card col">
+              <div class="prop-card-img">Property Photo</div>
+              <div class="prop-card-body">
+                <div class="prop-card-title">Dry Land, Epe Axis</div>
+                <div class="prop-card-loc">📍 Lagos</div>
+                <div class="prop-card-price">₦8,000,000</div>
+                <div class="prop-card-wa">Enquire via WhatsApp →</div>
+              </div>
+            </div>
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>WhatsApp only on property cards — not repeated as a section CTA below</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- ABOUT STRIP -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">06</span> Meet Chiamaka Sonia</div><div class="section-type">Personal Brand Strip</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col-img wf-img-box" style="--w:200px;height:220px;">
+              📷 Chiamaka Portrait
+            </div>
+            <div class="col" style="justify-content:center;gap:10px;">
+              <div class="wf-text label">The Face Behind the Brand</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:rgba(255,255,255,0.45);">Chiamaka Sonia</div>
+              <div class="wf-text body">Short bio — 2–3 sentences. Founder story, passion for real estate, cities covered.</div>
+              <div style="display:flex;gap:8px;margin-top:4px;">
+                <div class="wf-btn ghost" style="padding:7px 14px;">Full Story →</div>
+                <div class="wf-btn ghost" style="padding:7px 14px;">@savvyhomes ↗</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">07</span> Testimonials</div><div class="section-type">Auto-Carousel · 1 Item · 4s Interval</div></div>
+        <div class="section-body">
+          <div class="wf-text label" style="margin-bottom:4px;">What Clients Say</div>
+          <div class="wf-text subhead" style="margin-bottom:14px;">Real Stories, Real People</div>
+          <div class="carousel-mock">
+            <div class="carousel-slide">
+              <div class="carousel-quote">
+                <div class="carousel-quote-mark">"</div>
+                <div class="carousel-body">Chiamaka made finding land in Abuja so easy. She understood exactly what I needed and delivered. I'll recommend Savvy Homes to anyone looking to invest.</div>
+                <div class="carousel-author">— Emeka O. · Abuja Client</div>
+              </div>
+            </div>
+            <div class="carousel-arrows">
+              <div class="carousel-arrow">‹</div>
+              <div class="carousel-arrow">›</div>
+            </div>
+            <div class="carousel-dots">
+              <div class="carousel-dot active"></div>
+              <div class="carousel-dot"></div>
+              <div class="carousel-dot"></div>
+            </div>
+          </div>
+          <div class="notes notes-new"><div class="notes-title">Changes</div><ul>
+            <li>Replaced 3-column static grid with a single auto-sliding carousel</li>
+            <li>Slides automatically every 4 seconds, one testimonial at a time</li>
+            <li>Left/right arrows for manual control; dot indicators for position</li>
+            <li>Cleaner, more focused — forces visitors to actually read each review</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- FINAL CTA -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">08</span> Closing CTA Strip</div><div class="section-type">Minimal Conversion Band</div></div>
+        <div class="section-body">
+          <div style="text-align:center;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div class="wf-text headline" style="font-size:18px;">Ready to Find Your Property?</div>
+            <div class="wf-text body">One conversation is all it takes. Reach Chiamaka directly.</div>
+            <div class="wf-btn wa" style="padding:12px 28px;">Chat on WhatsApp</div>
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>This is the ONE dedicated WhatsApp CTA section on the page — deliberate placement at the very end</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">09</span> Footer</div><div class="section-type">Global · 4-Col</div></div>
+        <div class="section-body">
+          <div class="footer-visual">
+            <div>
+              <div class="footer-col-label">Brand + RC</div>
+              <div class="footer-line" style="width:80%;"></div>
+              <div class="footer-line" style="width:55%;background:rgba(245,146,10,0.15);"></div>
+            </div>
+            <div>
+              <div class="footer-col-label">Pages</div>
+              <div class="footer-line" style="width:65%;"></div>
+              <div class="footer-line" style="width:50%;"></div>
+              <div class="footer-line" style="width:70%;"></div>
+              <div class="footer-line" style="width:55%;"></div>
+            </div>
+            <div>
+              <div class="footer-col-label">Services</div>
+              <div class="footer-line" style="width:80%;"></div>
+              <div class="footer-line" style="width:60%;"></div>
+              <div class="footer-line" style="width:75%;"></div>
+            </div>
+            <div>
+              <div class="footer-col-label">Contact</div>
+              <div class="footer-line" style="width:90%;"></div>
+              <div class="footer-line" style="width:70%;"></div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.2);padding-top:8px;letter-spacing:0.06em;text-transform:uppercase;">
+            © 2025 Savvy Homes · RC #2905976 · @savvyhomes
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>RC number lives here + the ticker strip — two spots max, neither is a "badge"</li>
+          </ul></div>
+        </div>
+      </div>
+
+    </div><!-- /home -->
+
+
+    <!-- ══════════════════════ ABOUT ══════════════════════ -->
+    <div class="page-content" id="page-about">
+      <div class="page-header">
+        <div class="page-title">About <span>Trust builder · Founder credibility</span></div>
+        <div class="page-tags"><span class="tag tag-primary">Story</span><span class="tag tag-gray">5 Sections</span></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">01</span> About Hero</div><div class="section-type">Split · Photo Left</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col-img wf-img-box" style="--w:42%;height:280px;">📷 Chiamaka — Full Portrait</div>
+            <div class="col" style="justify-content:center;gap:10px;">
+              <div class="wf-text label">Who We Are</div>
+              <div class="wf-text headline">Built on Trust,<br/>Driven by Results</div>
+              <div class="wf-text body">2–3 sentences: who Savvy Homes is, where they operate, what makes them different.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">02</span> Founder Narrative</div><div class="section-type">Long-Form Story · No Boxes</div></div>
+        <div class="section-body">
+          <div class="wf-text label" style="margin-bottom:8px;">The Story</div>
+          <div class="wf-text headline" style="font-size:18px;margin-bottom:10px;">Chiamaka Sonia</div>
+          <div class="wf-text body" style="margin-bottom:8px;">Paragraph 1 — her background and journey into real estate.</div>
+          <div class="wf-text body" style="margin-bottom:8px;">Paragraph 2 — what drives her, her approach, client relationships.</div>
+          <div class="wf-divider"></div>
+          <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+            <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.2);">RC #2905976</div>
+            <div style="width:1px;height:12px;background:var(--border);"></div>
+            <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.2);">@savvyhomes on Instagram</div>
+            <div style="width:1px;height:12px;background:var(--border);"></div>
+            <div class="wf-btn wa" style="padding:7px 16px;">WhatsApp Chiamaka</div>
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>RC number once, inline — not a badge, not a section of its own</li>
+            <li>WhatsApp here is justified — this is the most personal section on the site</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">03</span> Why Choose Us</div><div class="section-type">4-Point Value Grid</div></div>
+        <div class="section-body">
+          <div class="wf-text label" style="margin-bottom:6px;">Why Savvy Homes</div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col" style="gap:4px;"><div class="wf-text label" style="font-size:11px;">✔ Verified & Registered</div><div class="wf-text body">Short line.</div></div>
+            <div class="col" style="gap:4px;"><div class="wf-text label" style="font-size:11px;">✔ Lagos + Abuja</div><div class="wf-text body">Short line.</div></div>
+            <div class="col" style="gap:4px;"><div class="wf-text label" style="font-size:11px;">✔ 8+ Years</div><div class="wf-text body">Short line.</div></div>
+            <div class="col" style="gap:4px;"><div class="wf-text label" style="font-size:11px;">✔ Direct Access</div><div class="wf-text body">Short line.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">04</span> Stats</div><div class="section-type">Counter Strip</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col" style="align-items:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:rgba(245,146,10,0.5);">500+</div><div class="wf-text body">Properties</div></div>
+            <div class="col" style="align-items:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:rgba(245,146,10,0.5);">8+</div><div class="wf-text body">Years</div></div>
+            <div class="col" style="align-items:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:rgba(245,146,10,0.5);">2</div><div class="wf-text body">Cities</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">05</span> Closing CTA</div><div class="section-type">Minimal</div></div>
+        <div class="section-body" style="text-align:center;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="wf-text subhead">Have a Question? Let's Talk.</div>
+          <div class="wf-btn primary" style="padding:10px 24px;">View Properties →</div>
+        </div>
+      </div>
+    </div><!-- /about -->
+
+
+    <!-- ══════════════════════ PROPERTIES ══════════════════════ -->
+    <div class="page-content" id="page-properties">
+      <div class="page-header">
+        <div class="page-title">Properties <span>Listings · Fast Inquiry · Shortlist Request</span></div>
+        <div class="page-tags">
+          <span class="tag tag-primary">Listings</span>
+          <span class="tag tag-gray">4 Sections</span>
+          <span class="tag tag-new">Fast Inquiry + Shortlist Added</span>
+        </div>
+      </div>
+
+      <!-- PAGE HEADER -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">01</span> Page Header</div><div class="section-type">Slim Dark Hero</div></div>
+        <div class="section-body">
+          <div class="wf-img-box" style="height:80px;">
+            <div class="wf-text label">Properties — Dark Header Band</div>
+            <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.15);">Breadcrumb: Home → Properties</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">02</span> Filter Bar</div><div class="section-type">Static Tabs</div></div>
+        <div class="section-body">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <div class="wf-btn primary">All</div>
+            <div class="wf-btn ghost">Lagos</div>
+            <div class="wf-btn ghost">Abuja</div>
+            <div class="wf-btn ghost">Land</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LISTINGS GRID -->
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">03</span> Listings Grid</div><div class="section-type">3-Col · Static HTML Cards</div></div>
+        <div class="section-body">
+          <div class="wf-text label" style="margin-bottom:10px;">Lagos</div>
+          <div class="row" style="margin-bottom:16px;">
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">3-Bed Terrace, Lekki</div><div class="prop-card-loc">📍 Lagos</div><div class="prop-card-price">₦45M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">Dry Land, Ibeju-Lekki</div><div class="prop-card-loc">📍 Lagos</div><div class="prop-card-price">₦8M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">4-Bed Duplex, Ajah</div><div class="prop-card-loc">📍 Lagos</div><div class="prop-card-price">₦60M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+          </div>
+          <div class="wf-text label" style="margin-bottom:10px;">Abuja</div>
+          <div class="row">
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">2-Bed Apartment, Wuse 2</div><div class="prop-card-loc">📍 Abuja</div><div class="prop-card-price">₦30M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">Land, Gwarinpa</div><div class="prop-card-loc">📍 Abuja</div><div class="prop-card-price">₦12M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+            <div class="prop-card col"><div class="prop-card-img">Photo</div><div class="prop-card-body"><div class="prop-card-title">3-Bed Terrace, Maitama</div><div class="prop-card-loc">📍 Abuja</div><div class="prop-card-price">₦55M</div><div class="prop-card-wa">Enquire via WhatsApp →</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAST INQUIRY + SHORTLIST -->
+      <div class="section-block">
+        <div class="section-header">
+          <div class="section-name"><span class="section-num">04</span> Fast Inquiry & Shortlist Request</div>
+          <div class="section-type">Dual-Tab Panel · New Section</div>
+        </div>
+        <div class="section-body">
+          <div class="wf-text label" style="margin-bottom:4px;">Can't find what you're looking for?</div>
+          <div class="wf-text subhead" style="margin-bottom:14px;">We'll Find It For You</div>
+
+          <div class="inquiry-panel">
+            <div class="inquiry-tab-row">
+              <div class="inquiry-tab on">⚡ Fast Inquiry</div>
+              <div class="inquiry-tab off">📋 Request a Shortlist</div>
+            </div>
+
+            <!-- Tab 1: Fast Inquiry -->
+            <div>
+              <div class="wf-text body" style="margin-bottom:10px;">Quick form — phone + what you're looking for. Sends directly to WhatsApp.</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div class="row mb0">
+                  <div class="wf-field col">Your Name</div>
+                  <div class="wf-field col">Phone Number</div>
+                </div>
+                <div class="wf-field">I'm looking for... (e.g. 3-bed in Lagos under ₦40M)</div>
+                <div class="wf-btn wa" style="align-self:flex-start;padding:10px 22px;">Send via WhatsApp ⚡</div>
+              </div>
+            </div>
+
+            <!-- Tab 2 preview (ghost) -->
+            <div style="margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,255,255,0.1);">
+              <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.18);letter-spacing:0.05em;">
+                REQUEST A SHORTLIST tab: Location preference · Budget range · Property type · Bedrooms needed · Move-in timeline → Chiamaka curates a personalised list and sends it via WhatsApp
+              </div>
+            </div>
+          </div>
+
+          <div class="notes notes-new"><div class="notes-title">New Section</div><ul>
+            <li>Fast Inquiry: Name + Phone + open-text need → WhatsApp pre-filled message, zero friction</li>
+            <li>Request a Shortlist: structured form — budget, type, city, bedrooms, timeline → Chiamaka sends curated options</li>
+            <li>Both tabs send to WhatsApp — no backend. Shortlist tab collects more detail before connecting</li>
+            <li>Shortlets: can be listed as a Property Type option in the Shortlist tab — soft presence without a full section</li>
+          </ul></div>
+        </div>
+      </div>
+
+    </div><!-- /properties -->
+
+
+    <!-- ══════════════════════ SERVICES ══════════════════════ -->
+    <div class="page-content" id="page-services">
+      <div class="page-header">
+        <div class="page-title">Services <span>4 core offerings · WhatsApp-led</span></div>
+        <div class="page-tags"><span class="tag tag-primary">Offerings</span><span class="tag tag-gray">5 Sections</span></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">01</span> Page Header</div><div class="section-type">Slim Dark Band</div></div>
+        <div class="section-body">
+          <div class="wf-img-box" style="height:80px;"><div class="wf-text label">Our Services — Header</div></div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">02</span> Property Sales</div><div class="section-type">Service Detail · Image Right</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col" style="justify-content:center;gap:10px;">
+              <div class="wf-text label">🏠 Property Sales</div>
+              <div class="wf-text subhead">Find, Buy & Own</div>
+              <div class="wf-text body">Description paragraph — what this service covers, how it works.</div>
+              <div class="wf-text body">• What's included point one</div>
+              <div class="wf-text body">• What's included point two</div>
+              <div class="wf-btn wa" style="padding:9px 20px;align-self:flex-start;margin-top:6px;">Enquire on WhatsApp</div>
+            </div>
+            <div class="col-img wf-img-box" style="--w:40%;height:200px;">📷 Service Image</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">03</span> Land Sales</div><div class="section-type">Service Detail · Image Left</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col-img wf-img-box" style="--w:40%;height:200px;">📷 Service Image</div>
+            <div class="col" style="justify-content:center;gap:10px;">
+              <div class="wf-text label">🌍 Land Sales</div>
+              <div class="wf-text subhead">Invest in Land</div>
+              <div class="wf-text body">Description paragraph.</div>
+              <div class="wf-text body">• Included point</div>
+              <div class="wf-text body">• Included point</div>
+              <div class="wf-btn wa" style="padding:9px 20px;align-self:flex-start;margin-top:6px;">Enquire on WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">04</span> Consultation + Inspection</div><div class="section-type">2-Col Cards (Grouped)</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col" style="gap:8px;">
+              <div class="wf-img-box" style="height:80px;">📷 Consultation Image</div>
+              <div class="wf-text label">🧭 Consultation</div>
+              <div class="wf-text body">Description — who it's for, what happens.</div>
+              <div class="wf-btn wa" style="padding:8px 16px;align-self:flex-start;">Book Consultation</div>
+            </div>
+            <div class="col" style="gap:8px;">
+              <div class="wf-img-box" style="height:80px;">📷 Inspection Image</div>
+              <div class="wf-text label">🔍 Property Inspection</div>
+              <div class="wf-text body">Description — what's inspected, timeline.</div>
+              <div class="wf-btn wa" style="padding:8px 16px;align-self:flex-start;">Book Inspection</div>
+            </div>
+          </div>
+          <div class="wf-divider"></div>
+          <div class="wf-text" style="font-size:10px;color:rgba(255,255,255,0.2);font-style:italic;">Also available: shortlet property referrals — ask Chiamaka via WhatsApp.</div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">05</span> Services CTA</div><div class="section-type">Closing Band</div></div>
+        <div class="section-body" style="text-align:center;padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="wf-text subhead">Not Sure Which Service?</div>
+          <div class="wf-text body">Chat with Chiamaka and she'll guide you.</div>
+          <div class="wf-btn wa" style="padding:10px 24px;">Chat on WhatsApp</div>
+        </div>
+      </div>
+    </div><!-- /services -->
+
+
+    <!-- ══════════════════════ CONTACT ══════════════════════ -->
+    <div class="page-content" id="page-contact">
+      <div class="page-header">
+        <div class="page-title">Contact <span>Lead capture · WhatsApp-first</span></div>
+        <div class="page-tags"><span class="tag tag-primary">Lead Gen</span><span class="tag tag-gray">3 Sections</span></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">01</span> Page Header</div><div class="section-type">Slim Dark Band</div></div>
+        <div class="section-body"><div class="wf-img-box" style="height:80px;"><div class="wf-text label">Contact — Header</div></div></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">02</span> Contact Core</div><div class="section-type">Split — Form + Info</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col" style="gap:8px;">
+              <div class="wf-text label" style="margin-bottom:4px;">Send a Message</div>
+              <div class="row mb0"><div class="wf-field col">Name</div><div class="wf-field col">Phone</div></div>
+              <div class="wf-field">Email (optional)</div>
+              <div class="wf-field">Enquiry Type ▾</div>
+              <div class="wf-textarea">Message</div>
+              <div class="wf-btn wa" style="align-self:flex-start;padding:10px 20px;">Send via WhatsApp →</div>
+            </div>
+            <div class="col" style="gap:10px;">
+              <div class="wf-text label" style="margin-bottom:4px;">Or Reach Directly</div>
+              <div class="wf-text body">📞 08183196861</div>
+              <div class="wf-text body">📸 @savvyhomes</div>
+              <div class="wf-text body">📍 Lagos & Abuja</div>
+              <div class="wf-divider"></div>
+              <div class="wf-btn wa" style="padding:10px 20px;">Open WhatsApp</div>
+            </div>
+          </div>
+          <div class="notes"><div class="notes-title">Notes</div><ul>
+            <li>Form constructs a WhatsApp message with pre-filled fields — zero backend</li>
+            <li>Enquiry Types: Property Sales / Land / Consultation / Inspection / Other</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header"><div class="section-name"><span class="section-num">03</span> Coverage</div><div class="section-type">2-Col City Cards</div></div>
+        <div class="section-body">
+          <div class="row">
+            <div class="col wf-img-box" style="height:100px;">🏙 Lagos — Key estates/areas</div>
+            <div class="col wf-img-box" style="height:100px;">🏛 Abuja — Key districts</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /contact -->
+
+  </main>
+</div>
+
+<script>
+  const pages = {
+    home: ['00 Navigation','01 Hero','02 Moving Text Strip','03 Services Overview','04 Stats Strip','05 Featured Properties','06 Meet Chiamaka','07 Testimonials','08 Closing CTA','09 Footer'],
+    about: ['01 About Hero','02 Founder Narrative','03 Why Choose Us','04 Stats','05 Closing CTA'],
+    properties: ['01 Page Header','02 Filter Bar','03 Listings Grid','04 Fast Inquiry & Shortlist'],
+    services: ['01 Page Header','02 Property Sales','03 Land Sales','04 Consultation + Inspection','05 Services CTA'],
+    contact: ['01 Page Header','02 Contact Core','03 Coverage']
+  };
+
+  function buildSidebar(page) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = `<div class="sidebar-label">Sections</div>`;
+    const tree = document.createElement('div');
+    tree.className = 'section-tree';
+    pages[page].forEach((s, i) => {
+      const item = document.createElement('div');
+      item.className = 'tree-section' + (i === 0 ? ' active' : '');
+      item.textContent = s;
+      tree.appendChild(item);
+    });
+    sidebar.appendChild(tree);
+  }
+
+  function showPage(pageId, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('visible'));
+    document.getElementById('page-' + pageId).classList.add('visible');
+    document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildSidebar(pageId);
+    document.querySelector('.canvas').scrollTop = 0;
+  }
+
+  buildSidebar('home');
+</script>
+</body>
+</html>

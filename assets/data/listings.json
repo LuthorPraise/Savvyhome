@@ -1,0 +1,68 @@
+[
+  {
+    "id": "lekki-terrace",
+    "title": "Four-Bedroom Terrace with Private Lounge",
+    "location": "Lekki Phase 1, Lagos",
+    "city": "Lagos",
+    "type": "House",
+    "price": "NGN 185,000,000",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=luxury%20modern%20terrace%20home%20in%20Lekki%20Lagos%2C%20golden%20hour%2C%20premium%20real%20estate%20photography%2C%20warm%20natural%20light%2C%20cinematic%2C%20high%20detail&image_size=landscape_16_9",
+    "alt": "Modern terrace home in Lekki with warm evening lighting",
+    "featured": true
+  },
+  {
+    "id": "wuse-apartment",
+    "title": "Two-Bedroom Apartment with City Views",
+    "location": "Wuse 2, Abuja",
+    "city": "Abuja",
+    "type": "Apartment",
+    "price": "NGN 92,000,000",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=elegant%20contemporary%20apartment%20interior%20and%20exterior%20in%20Wuse%202%20Abuja%2C%20warm%20neutral%20palette%2C%20premium%20real%20estate%20photography%2C%20cinematic%20lighting&image_size=landscape_16_9",
+    "alt": "Contemporary apartment residence in Wuse 2 Abuja",
+    "featured": true
+  },
+  {
+    "id": "epe-land",
+    "title": "Dry Land in a Fast-Growth Corridor",
+    "location": "Epe Axis, Lagos",
+    "city": "Lagos",
+    "type": "Land",
+    "price": "NGN 18,000,000",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=prime%20dry%20land%20in%20Epe%20Lagos%2C%20clear%20sky%2C%20luxury%20investment%20real%20estate%20photography%2C%20warm%20sunlight%2C%20cinematic%20open%20space&image_size=landscape_16_9",
+    "alt": "Open dry land in Epe Lagos under warm sunlight",
+    "featured": true
+  },
+  {
+    "id": "maitama-duplex",
+    "title": "Five-Bedroom Duplex for Quiet Luxury Living",
+    "location": "Maitama, Abuja",
+    "city": "Abuja",
+    "type": "House",
+    "price": "NGN 320,000,000",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=luxury%20five%20bedroom%20duplex%20in%20Maitama%20Abuja%2C%20lush%20landscaping%2C%20premium%20real%20estate%20photography%2C%20cinematic%20warm%20light&image_size=landscape_16_9",
+    "alt": "Large duplex home in Maitama Abuja with landscaped grounds",
+    "featured": false
+  },
+  {
+    "id": "gwarinpa-plot",
+    "title": "Serviced Plot for Residential Development",
+    "location": "Gwarinpa, Abuja",
+    "city": "Abuja",
+    "type": "Land",
+    "price": "NGN 35,000,000",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=serviced%20residential%20plot%20in%20Gwarinpa%20Abuja%2C%20premium%20land%20investment%20photography%2C%20warm%20cinematic%20daylight%2C%20clear%20urban%20setting&image_size=landscape_16_9",
+    "alt": "Serviced residential plot in Gwarinpa Abuja",
+    "featured": false
+  },
+  {
+    "id": "banana-shortlet",
+    "title": "Luxury Shortlet with Soft Contemporary Interiors",
+    "location": "Banana Island, Lagos",
+    "city": "Lagos",
+    "type": "Shortlet",
+    "price": "NGN 650,000 per night",
+    "image": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=luxury%20shortlet%20apartment%20in%20Banana%20Island%20Lagos%2C%20soft%20contemporary%20interior%2C%20premium%20hospitality%20photography%2C%20warm%20light%2C%20cinematic&image_size=landscape_16_9",
+    "alt": "Luxury shortlet apartment in Banana Island Lagos",
+    "featured": false
+  }
+]
