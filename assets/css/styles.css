@@ -1165,6 +1165,17 @@ textarea {
     width: clamp(6rem, 26vw, 7.5rem);
   }
 
+  .section-topline--what-we-do > div,
+  .section-topline--client-stories > div {
+    width: 100%;
+    max-width: none;
+  }
+
+  .section-topline--what-we-do .section-title,
+  .section-topline--client-stories .section-title {
+    max-width: none;
+  }
+
   .page-hero .hero-title,
   .page-hero .page-title {
     max-width: 9ch;
